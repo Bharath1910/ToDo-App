@@ -11,17 +11,37 @@ app.get('/', (req, res) => {
     res.send("hello :)")
 })
 
-app.post('/login', isExists, (req, res) => {
-    console.log("/login hit")
+app.post('/register', (req, res) => {
+
+})
+
+app.post('/login', isExists, async (req, res) => {
     const {username, password} = req.body
-    User.create({username, password, todoData: {}})
+
+    if (!(req.isExists)) {
+        try {
+            User.create({username, password, todoData: {}})
+            res.status(200).send("Updated DB")
+        } 
+        catch (error) {
+            console.log(error)    
+            res.status(401).send("Couldnt update DB")
+        }
+    } else {
+        res.status(200).send("User already exists")
+    }
 })
 
 
 async function isExists(req, res, next) {
     const user = await User.findOne({username: req.body.username})
 
-    if (user === null) res.status(401).send("User Doesn't exists")
+    if (user === null) {
+        req.isExists = false
+    } else {
+        req.isExists = true
+    }
+
     next()
 }
 
