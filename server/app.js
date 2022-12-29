@@ -1,6 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 require('./config/db.connect').connect()
 const User = require('./schema/user')
@@ -8,6 +10,7 @@ const User = require('./schema/user')
 app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
     res.send("hello :)")
@@ -49,7 +52,6 @@ app.post('/login', isExists, async (req, res) => {
     }
 })
 
-
 async function isExists(req, res, next) {
     const user = await User.findOne({username: req.body.username})
 
@@ -75,7 +77,6 @@ function encrypt(req, res, next) {
                 next()
             }
         )
-    
 }
 
 app.listen(3000)
