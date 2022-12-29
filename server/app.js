@@ -11,11 +11,7 @@ app.get('/', (req, res) => {
     res.send("hello :)")
 })
 
-app.post('/register', (req, res) => {
-
-})
-
-app.post('/login', isExists, async (req, res) => {
+app.post('/register', isExists, (req, res) => {
     const {username, password} = req.body
 
     if (!(req.isExists)) {
@@ -29,6 +25,16 @@ app.post('/login', isExists, async (req, res) => {
         }
     } else {
         res.status(200).send("User already exists")
+    }
+})
+
+app.post('/login', isExists, async (req, res) => {
+    const {username, password} = req.body
+
+    if (req.isExists) {
+        // check pwd
+    } else {
+        res.status(200).send("User Doesnt exists")
     }
 })
 
