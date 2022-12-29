@@ -19,6 +19,14 @@ function AddToDo() {
         setInput(copyLis)
     }
 
+    function completedTodo(inp) {
+        return inp.filter(todo => todo.completed === true)
+    }
+
+    function notCompleted(inp) {
+        return inp.filter(todo => todo.completed === false)
+    }
+
     return (
         <>  
             <p>Welcome Bharath</p>
@@ -26,10 +34,13 @@ function AddToDo() {
             <button onClick={handleAdd}>+</button>
             <br/>
 
-            {input.map((todo) => {
+            <h1>To Do</h1>
+            
+            {completedTodo(input).map((todo) => {
                 function handleOnChange() {
                     updateTodo(todo.id)
                 }
+                
                 return (
                     <>
                         <label>{todo.title}</label>
@@ -44,6 +55,25 @@ function AddToDo() {
                 );
             })}
 
+            <h1>Completed</h1>
+            {notCompleted(input).map((todo) => {
+                function handleOnChange() {
+                    updateTodo(todo.id)
+                }
+                
+                return (
+                    <>
+                        <label>{todo.title}</label>
+                        <input 
+                            type="checkbox" 
+                            value="hello" 
+                            checked={todo.completed}
+                            onChange={handleOnChange}
+                        />
+                        <br/>
+                    </>
+                );
+            })}
             <button>Sync to cloud</button>
         </>
     )
