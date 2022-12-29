@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import TodoList from './TodoList';
 
 function AddToDo() {
     const [input, setInput] = useState([])
@@ -35,25 +36,7 @@ function AddToDo() {
             <br/>
 
             <h1>To Do</h1>
-            
-            {completedTodo(input).map((todo) => {
-                function handleOnChange() {
-                    updateTodo(todo.id)
-                }
-                
-                return (
-                    <>
-                        <label>{todo.title}</label>
-                        <input 
-                            type="checkbox" 
-                            value="hello" 
-                            checked={todo.completed}
-                            onChange={handleOnChange}
-                        />
-                        <br/>
-                    </>
-                );
-            })}
+            <TodoList todoList={notCompleted(input)}/>
 
             <h1>Completed</h1>
             {notCompleted(input).map((todo) => {
@@ -74,6 +57,9 @@ function AddToDo() {
                     </>
                 );
             })}
+
+            <h1>Testing</h1>
+            <TodoList todoList={input}/>
             <button>Sync to cloud</button>
         </>
     )
