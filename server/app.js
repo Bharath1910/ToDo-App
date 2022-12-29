@@ -1,5 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
 require('./config/db.connect').connect()
 const User = require('./schema/user')
 
@@ -11,12 +13,12 @@ app.get('/', (req, res) => {
     res.send("hello :)")
 })
 
-app.post('/register', isExists, (req, res) => {
-    const {username, password} = req.body
+app.post('/register', isExists, encrypt, (req, res) => {
+    const {username} = req.body
 
     if (!(req.isExists)) {
         try {
-            User.create({username, password, todoData: {}})
+            User.create({username, password: req.hash, todoData: {}})
             res.status(200).send("Updated DB")
         } 
         catch (error) {
@@ -32,7 +34,16 @@ app.post('/login', isExists, async (req, res) => {
     const {username, password} = req.body
 
     if (req.isExists) {
-        // check pwd
+        const user = await User.findOne({username})
+
+        bcrypt.compare(password, user.password)
+            .then((result) => {
+                if (result) {
+                    res.status(200).send("Right pass")
+                } else {
+                    res.status(200).send("wrong pass :(")
+                }
+            })
     } else {
         res.status(200).send("User Doesnt exists")
     }
@@ -44,11 +55,27 @@ async function isExists(req, res, next) {
 
     if (user === null) {
         req.isExists = false
+        next()
+
     } else {
         req.isExists = true
+        next()
     }
+}
 
-    next()
+function encrypt(req, res, next) {
+    console.log("encrypt middleware was hit")
+    const {username, password} = req.body
+
+    bcrypt.hash(password, 10)
+        .then(
+            (hash) => {
+                console.log(hash)
+                req.hash = hash
+                next()
+            }
+        )
+    
 }
 
 app.listen(3000)
