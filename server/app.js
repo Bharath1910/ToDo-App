@@ -1,4 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
+require('./config/db.connect').connect()
+const User = require('./schema/user')
 
 app = express()
 app.use(express.json())
@@ -13,5 +16,9 @@ app.post('/login', (req, res) => {
     console.log(username)
     console.log(password);
 })
+
+async function isExists(req, res, next) {
+    console.log(":)")
+}
 
 app.listen(3000)
