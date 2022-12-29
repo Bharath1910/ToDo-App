@@ -42,6 +42,9 @@ app.post('/login', isExists, async (req, res) => {
         bcrypt.compare(password, user.password)
             .then((result) => {
                 if (result) {
+                    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
+                    res.cookie("token", token)
+
                     res.status(200).send("Right pass")
                 } else {
                     res.status(200).send("wrong pass :(")
