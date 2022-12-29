@@ -11,14 +11,18 @@ app.get('/', (req, res) => {
     res.send("hello :)")
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', isExists, (req, res) => {
+    console.log("/login hit")
     const {username, password} = req.body
-    console.log(username)
-    console.log(password);
+    User.create({username, password, todoData: {}})
 })
 
+
 async function isExists(req, res, next) {
-    console.log(":)")
+    const user = await User.findOne({username: req.body.username})
+
+    if (user === null) res.status(401).send("User Doesn't exists")
+    next()
 }
 
 app.listen(3000)
