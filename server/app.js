@@ -55,12 +55,15 @@ app.post('/login', isExists, async (req, res) => {
     }
 })
 
-app.get('/dashboard', async (req, res) => {
-    const decodedCookie = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
-    const user = await User.findById(decodedCookie.id)
-    user.password = undefined
+app.get('/getData', verifyToken, async (req, res) => {
+    req.userData.password = undefined
+    res.status(200).json(req.userData)
+});
 
-    res.status(200).json(user)
+app.post('/uploadData', verifyToken, async (req, res) => {
+    id = req.userData.id
+    await User.updateOne({_id: id}, {todoData: req.body.data})
+    res.status(200).send("updated DB :)")
 });
 
 async function isExists(req, res, next) {
@@ -87,6 +90,13 @@ function encrypt(req, res, next) {
                 next()
             }
         )
+}
+
+async function verifyToken(req, res, next) {
+    const decodedCookie = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+    const user = await User.findById(decodedCookie.id)
+    req.userData = user
+    next()
 }
 
 app.listen(3000)
