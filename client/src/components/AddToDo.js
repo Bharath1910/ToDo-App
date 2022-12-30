@@ -1,9 +1,15 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 function AddToDo() {
     const [input, setInput] = useState([])
     const inputRef = useRef(null)
+
+    useEffect(() => {
+        fetch('http://localhost:3000/getData')
+            .then(data => console.log(data))
+            .catch(error => console.error(error))
+    }, [])
 
     function handleAdd() {
         setInput(input.concat([{id: uuidv4(), title: inputRef.current.value, completed: false}]))
