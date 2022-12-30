@@ -10,7 +10,7 @@ function Todo({data, handleToggle, title}) {
                 }
                 
                 return (
-                    <label>
+                    <label key={todo.uuid}>
                         <input type="checkbox" checked={todo.completed} onChange={handleClick} />
                         {todo.title}
                     </label>

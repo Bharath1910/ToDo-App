@@ -1,6 +1,5 @@
 import React from 'react';
-import SubList from './Todo';
-import Completed from './Completed'
+import SubList from './SubList';
 
 function List({data, handleToggle}) {
     function completedData() {
@@ -12,12 +11,10 @@ function List({data, handleToggle}) {
     }
 
     return (
-        <>
+        <div>
             <SubList title="Todo" data={todoData()} handleToggle={handleToggle}/>
             <SubList title="Completed" data={completedData()} handleToggle={handleToggle}/>
-
-            <Completed data={completedData()}/>
-        </>
+        </div>
     )
 }
 
