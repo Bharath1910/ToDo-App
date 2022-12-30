@@ -8,7 +8,6 @@ import cookies from 'js-cookie'
 
 function App() {
     let navigate = useNavigate()
-
     const [data, setData] = useState([])
 
     async function postData(username, password) {
@@ -25,8 +24,7 @@ function App() {
         })
 
         const content = await response.json()
-        // setData(content)
-        console.log(content)
+        cookies.set("token", content.token)
 
         navigate('/dashboard')
     }

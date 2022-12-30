@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
+
 require('./config/db.connect').connect()
 const User = require('./schema/user')
 
@@ -11,6 +12,7 @@ app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
+
 app.get('/', (req, res) => {
     res.send("hello :)")
 })
@@ -42,12 +44,8 @@ app.post('/api/login', isExists, async (req, res) => {
             .then((result) => {
                 if (result) {
                     const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
-                    res.cookie("token", token)
-                    // res.set({
-                    //     'Access-Control-Allow-Credentials': 'true',
-                    //     'Access-Control-Allow-Origin': '*'
-                    // })
-                    res.status(200).json("Right pass")
+                    res.cookie("token", token);
+                    res.status(200).json({token: token})
                 } else {
                     res.status(200).json("wrong pass :(")
                 }
@@ -57,7 +55,7 @@ app.post('/api/login', isExists, async (req, res) => {
     }
 })
 
-app.get('/api/getData', verifyToken, async (req, res) => {
+app.post('/api/getData', verifyToken, async (req, res) => {
     req.userData.password = undefined
     res.status(200).json(req.userData)
 });
@@ -95,9 +93,7 @@ function encrypt(req, res, next) {
 }
 
 async function verifyToken(req, res, next) {
-    console.log("\n\n\n\n\n\n\n cookies")
-    console.log(req.headers.get('set-cookies'))
-    const decodedCookie = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+    const decodedCookie = jwt.verify(req.body.token, process.env.JWT_SECRET)
     const user = await User.findById(decodedCookie.id)
     req.userData = user
     next()
