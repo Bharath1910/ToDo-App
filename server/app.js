@@ -55,6 +55,14 @@ app.post('/login', isExists, async (req, res) => {
     }
 })
 
+app.get('/dashboard', async (req, res) => {
+    const decodedCookie = jwt.verify(req.cookies.token, process.env.JWT_SECRET)
+    const user = await User.findById(decodedCookie.id)
+    user.password = undefined
+
+    res.status(200).json(user)
+});
+
 async function isExists(req, res, next) {
     const user = await User.findOne({username: req.body.username})
 
@@ -69,8 +77,7 @@ async function isExists(req, res, next) {
 }
 
 function encrypt(req, res, next) {
-    console.log("encrypt middleware was hit")
-    const {username, password} = req.body
+    const {password} = req.body
 
     bcrypt.hash(password, 10)
         .then(
