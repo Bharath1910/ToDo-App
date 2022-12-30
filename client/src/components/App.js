@@ -1,11 +1,19 @@
+import React, {useState} from 'react';
 import './App.css';
-import AddToDo from './AddToDo';
+import Add from './Add'
 
 function App() {
-  return (
-    <>
-        <AddToDo/>
-    </>
+    const [data, setData] = useState([])
+
+    function displayData() {
+        console.log(data)
+    }
+    
+    return (
+        <>
+            <Add data={data} setData={setData}/>
+            <button onClick={displayData}>Display Data</button>
+        </>
   );
 }
 
