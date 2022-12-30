@@ -104,4 +104,12 @@ app.get('/api/test', (req, res) => {
     res.status(200).json({"data": [{title: "complete hw", completed: false, uuid: "s1234"},{title: "complete todo app", completed: true, uuid: "s1254"}]}) 
 });
 
+app.post('/api/login', async (req, res) => {
+    console.log("login route hit")
+    const user = await User.findOne({username: req.body.username})
+    console.log(user)
+    res.status(200).json(user.todoData)
+});
+
 app.listen(5500)
+
