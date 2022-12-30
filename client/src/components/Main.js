@@ -1,24 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import Add from './Add';
 import List from './List';
 import Sync from './Sync'
 
 function Main({data, setData}) {
-    // const [data, setData] = useState([])
-
-    // useEffect(() => {
-    //     fetch('http://localhost:5500/api/test')
-    //         .then(responce => responce.json())
-    //         .then(data => setData(data.data))
-    // }, [])
-
-    // useEffect(() => {
-    //     fetch('http://localhost:5500/api/test')
-    //         .then(responce => responce.json())
-    //         .then(data => setData(data.data))
-    // }, [])
-
+    useEffect(() => {
+        fetch('http://localhost:5500/api/getData')
+        .then(response => response.json())
+	    .then(data => console.log(data))
+	    .catch(err => console.error(err));
+    }, [])
 
     function handleToggle(uid) {
         const dataCopy = [...data]
@@ -31,7 +23,7 @@ function Main({data, setData}) {
         <>
             <Add data={data} setData={setData}/>
             <List data={data} handleToggle={handleToggle}/>
-            <Sync/>
+            <Sync data={data}/>
         </>
   );
 }

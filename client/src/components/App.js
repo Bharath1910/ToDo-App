@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
 import { useNavigate, Route, Routes } from 'react-router-dom';
-import Main from './Main'
-import Login from './Login'
+import Main from './Main';
+import Login from './Login';
+import Register from './Register';
+import cookies from 'js-cookie'
 
 
 function App() {
@@ -23,7 +25,8 @@ function App() {
         })
 
         const content = await response.json()
-        setData(content)
+        // setData(content)
+        console.log(content)
 
         navigate('/dashboard')
     }
@@ -31,6 +34,7 @@ function App() {
         <Routes>
             <Route path="/dashboard" element={<Main setData={setData} data={data} />}/>
             <Route path="/login" element={<Login postData={postData} />}/>
+            <Route path="/register" element={<Register />}/>
         </Routes>
   )
 }

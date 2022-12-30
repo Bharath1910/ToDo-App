@@ -3,11 +3,19 @@ import SubList from './SubList';
 
 function List({data, handleToggle}) {
     function completedData() {
-        return data.filter(obj => obj.completed === true)
+        if (!(data === undefined || data === null || data === [])) {
+            return data.filter(obj => obj.completed === true)
+        } else {
+            return []
+        }
     }
 
     function todoData() {
-        return data.filter(obj => obj.completed === false)
+        if (!(data === undefined || data === null || data === [])) {
+            return data.filter(obj => obj.completed === false)
+        } else {
+            return []
+        }
     }
 
     return (
