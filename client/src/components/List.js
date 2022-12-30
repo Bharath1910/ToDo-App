@@ -1,8 +1,8 @@
 import React from 'react';
-import Todo from './Todo';
+import SubList from './Todo';
 import Completed from './Completed'
 
-function List({data}) {
+function List({data, handleToggle}) {
     function completedData() {
         return data.filter(obj => obj.completed === true)
     }
@@ -13,7 +13,9 @@ function List({data}) {
 
     return (
         <>
-            <Todo data={todoData()}/>
+            <SubList title="Todo" data={todoData()} handleToggle={handleToggle}/>
+            <SubList title="Completed" data={completedData()} handleToggle={handleToggle}/>
+
             <Completed data={completedData()}/>
         </>
     )
