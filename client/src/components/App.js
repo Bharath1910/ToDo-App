@@ -8,9 +8,9 @@ function App() {
     const [data, setData] = useState([])
 
     useEffect(() => {
-        fetch('/api/test')
+        fetch('http://localhost:5500/api/test')
             .then(responce => responce.json())
-            .then(data => console.log(data))
+            .then(data => setData(data.data))
     }, [])
 
 
