@@ -62,7 +62,7 @@ app.get('/getData', verifyToken, async (req, res) => {
 
 app.post('/uploadData', verifyToken, async (req, res) => {
     id = req.userData.id
-    await User.updateOne({_id: id}, {todoData: req.body.data})
+    await User.updateOne({_id: id}, {todoData: [req.body.data]})
     res.status(200).send("updated DB :)")
 });
 
@@ -99,4 +99,9 @@ async function verifyToken(req, res, next) {
     next()
 }
 
-app.listen(3000)
+app.get('/api/test', (req, res) => {
+    console.log("route hit")
+    res.status(200).json({"data": [{title: "complete hw", completed: false, uuid: "s1234"},{title: "complete todo app", completed: true, uuid: "s1254"}]}) 
+});
+
+app.listen(5500)
