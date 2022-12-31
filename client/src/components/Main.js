@@ -11,29 +11,31 @@ function Main({data, setData}) {
     const token = cookies.get('token')
     const [user, setUser] = useState(null)
 
+    useEffect(() => {
+        if (token) {
+            fetch('http://localhost:5500/api/getData', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'token': token
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                setUser(data.username)
+                setData(data.todoData)
+            })
+            .catch(err => console.error(err));
+        }
+    }, [])
+
     function redirectLogin() {
         navigate('/login')
     }
-
-    useEffect(() => {
-        fetch('http://localhost:5500/api/getData', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({
-                'token': token
-            })
-        })
-        .then(response => response.json())
-	    .then(data => {
-            console.log(data)
-            setUser(data.username)
-            setData(data.todoData)
-        })
-	    .catch(err => console.error(err));
-    }, [])
 
     function handleToggle(uid) {
         const dataCopy = [...data]
