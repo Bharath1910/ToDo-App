@@ -62,7 +62,7 @@ app.post('/api/getData', verifyToken, async (req, res) => {
 
 app.post('/api/uploadData', verifyToken, async (req, res) => {
     id = req.userData.id
-    await User.updateOne({_id: id}, {todoData: [req.body.data]})
+    await User.updateOne({_id: id}, {todoData: req.body.data})
     res.status(200).json("updated DB :)")
 });
 
