@@ -8,10 +8,11 @@ import cookies from 'js-cookie'
 
 function App() {
     let navigate = useNavigate()
+    const [error, setError] = useState(null)
     const [data, setData] = useState([])
 
     async function postData(username, password) {
-        const response = await fetch("http://localhost:5500/api/login", {
+        const raw =  await fetch("http://localhost:5500/api/login", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -23,15 +24,25 @@ function App() {
             })
         })
 
-        const content = await response.json()
-        cookies.set("token", content.token, {expires: 1})
+        if (!raw.ok) {
+            setError("User does not exists")
+        } else {
+            const content = await raw.json()
+            
+            if (content.wrongPass) {
+                setError("Wrong Password")
+            } else {
+                cookies.set("token", content.token, {expires: 1})
+                navigate('/dashboard')
+            }
+        } 
 
-        navigate('/dashboard')
+
     }
     return (
         <Routes>
             <Route path="/dashboard" element={<Main setData={setData} data={data} />}/>
-            <Route path="/login" element={<Login postData={postData} />}/>
+            <Route path="/login" element={<Login postData={postData} error={error} />}/>
             <Route path="/register" element={<Register />}/>
         </Routes>
   )

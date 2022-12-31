@@ -1,13 +1,13 @@
 import React, {useRef} from 'react'
 
-function Login({postData}) {
+function Login({postData, error}) {
     const username = useRef()
     const password = useRef()
 
     function handlePost() {
         postData(username.current.value, password.current.value)
     }
-
+    
     return (
         <>
             <h1>Login</h1>
@@ -22,6 +22,7 @@ function Login({postData}) {
                 <input ref={password} type="password" />
             </label>
             <button onClick={handlePost}>Login</button>
+            {error && <p>{error}</p>}
         </>
     )
 }
