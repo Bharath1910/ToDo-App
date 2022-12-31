@@ -24,7 +24,7 @@ function App() {
         })
 
         const content = await response.json()
-        cookies.set("token", content.token)
+        cookies.set("token", content.token, {expires: 1})
 
         navigate('/dashboard')
     }
