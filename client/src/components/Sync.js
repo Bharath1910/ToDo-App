@@ -24,7 +24,7 @@ function Sync(data) {
             return new Promise(resolve => setTimeout(resolve, time));
           }
           
-          delay(1500).then(() => setInfo(null));
+        delay(1500).then(() => setInfo(null));
     }
 
     return (
