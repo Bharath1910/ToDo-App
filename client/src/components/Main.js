@@ -1,14 +1,21 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import Add from './Add';
 import List from './List';
 import Sync from './Sync';
-import cookies from 'js-cookie'
+import cookies from 'js-cookie';
+import {useNavigate} from 'react-router-dom';
 
 function Main({data, setData}) {
-    useEffect(() => {
-        const token = cookies.get('token')
+    const navigate = useNavigate()
+    const token = cookies.get('token')
+    const [user, setUser] = useState(null)
 
+    function redirectLogin() {
+        navigate('/login')
+    }
+
+    useEffect(() => {
         fetch('http://localhost:5500/api/getData', {
             method: 'POST',
             headers: {
@@ -20,7 +27,11 @@ function Main({data, setData}) {
             })
         })
         .then(response => response.json())
-	    .then(data => console.log(data))
+	    .then(data => {
+            console.log(data)
+            setUser(data.username)
+            setData(data.todoData)
+        })
 	    .catch(err => console.error(err));
     }, [])
 
@@ -31,13 +42,23 @@ function Main({data, setData}) {
         setData(dataCopy)
     }
 
-    return (
-        <>
-            <Add data={data} setData={setData}/>
-            <List data={data} handleToggle={handleToggle}/>
-            <Sync data={data}/>
-        </>
-  );
+    if (token) {
+        return (
+            <>
+                <h1>Welcome {user}</h1>
+                <Add data={data} setData={setData}/>
+                <List data={data} handleToggle={handleToggle}/>
+                <Sync data={data}/>
+            </>
+        );
+    } else {
+        return (
+            <>
+                <h1>Please Login</h1>
+                <button onClick={redirectLogin}>Login</button>
+            </>
+        )
+    }
 }
 
 export default Main;
