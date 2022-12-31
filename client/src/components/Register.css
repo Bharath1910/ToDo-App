@@ -32,7 +32,7 @@ input[type=text], input[type=password], select, textarea {
     border-radius: 6px;
 }
 
-.register {
+.register, .login {
     background-color: #4CAF50;
     color: white;
     font-size: 20px;
