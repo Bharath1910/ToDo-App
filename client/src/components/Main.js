@@ -48,8 +48,8 @@ function Main({data, setData}) {
     if (token) {
         return (
             <div className='flex cover'>
-                <div className='midMain midAdd'>
-                    <h1>Welcome {user}</h1>
+                <div className='midAdd'>
+                    <h1>Welcome, <span>{user}</span></h1>
                     <Add data={data} setData={setData}/>
                 </div>
 

@@ -12,10 +12,22 @@
     padding: 20px;
     border-radius: 10px;
 
-    height: 200px;
+    height: 180px;
     width: 1400px;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-around;
+    font-family: 'Roboto', sans-serif;
+}
+
+.midAdd span {
+    color: #4CAF50;
+    text-transform: capitalize;
 }
 
 .cover {
     flex-direction: column;
 }
+
