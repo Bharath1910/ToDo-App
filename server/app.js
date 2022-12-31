@@ -30,7 +30,7 @@ app.post('/api/register', isExists, encrypt, (req, res) => {
             res.status(401).json("Couldnt update DB")
         }
     } else {
-        res.status(200).json("User already exists")
+        res.status(401).json("User already exists")
     }
 })
 
