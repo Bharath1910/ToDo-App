@@ -1,5 +1,6 @@
 import React, {useRef} from 'react';
-import {v4 as uuidv4} from 'uuid'
+import {v4 as uuidv4} from 'uuid';
+import './Add.css';
 
 function Add({data, setData}) {
     const addData = useRef("")
@@ -15,10 +16,10 @@ function Add({data, setData}) {
     }
 
     return (
-        <>
-            <input type="text" ref={addData} />
-            <button onClick={handleAddData}>+</button> 
-        </>
+        <div className='add'>
+            <input className='short' type="text" ref={addData} />
+            <button className='addButton' onClick={handleAddData}>+</button> 
+        </div>
     )
 }
 

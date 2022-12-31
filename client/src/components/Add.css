@@ -1,0 +1,17 @@
+.add {
+    display: flex;
+    column-gap: 20px;
+    align-items: center;
+}
+
+.add input {
+    flex: 9;
+    height: 45px;
+}
+
+.add button {
+    flex: 1;
+    margin-top: 0px;
+    font-size: 30px;
+    padding: 5px;
+}
