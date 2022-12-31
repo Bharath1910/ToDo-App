@@ -28,7 +28,7 @@ function App() {
             setError("User does not exists")
         } else {
             const content = await raw.json()
-            
+
             if (content.wrongPass) {
                 setError("Wrong Password")
             } else {

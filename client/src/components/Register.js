@@ -1,7 +1,8 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 function Register() {
+    const [error, setError] = useState(null)
     const navigate = useNavigate()
     const username = useRef()
     const password = useRef()
@@ -17,9 +18,15 @@ function Register() {
                 },
                 body: JSON.stringify({username: username.current.value, password: password.current.value})
             })
-            const content = await raw.json();
-            console.log(content)
-            navigate('/login')
+
+            if (!raw.ok) {
+                const content = await raw.json();
+                setError(content)
+            } else {
+                navigate('/login')
+            }
+        } else {
+            setError("Password doesn't match")
         }
     }
 
@@ -44,6 +51,7 @@ function Register() {
             </label>
 
             <button onClick={handleRegister}>Register</button>
+            {error && <p>{error}</p>}
 
         </>
     )

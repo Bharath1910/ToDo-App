@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cookies from 'js-cookie'
 
 function Sync(data) {
+    const [info, setInfo] = useState(null)
+
     async function uploadData() {
         const token = cookies.get('token')
         const postData = {...data, token: token}
@@ -16,11 +18,20 @@ function Sync(data) {
         })
 
         const content = await raw.json();
-        console.log(content)
+        setInfo(content)
+
+        function delay(time) {
+            return new Promise(resolve => setTimeout(resolve, time));
+          }
+          
+          delay(1500).then(() => setInfo(null));
     }
 
     return (
-        <button onClick={uploadData}>Sync To Cloud</button>
+        <>
+            <button onClick={uploadData}>Sync To Cloud</button>
+            {info && <p>{info}</p>}
+        </>
     )
 }
 
