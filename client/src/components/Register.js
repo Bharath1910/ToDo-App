@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import './Register.css';
 
 function Register() {
     const [error, setError] = useState(null)
@@ -31,29 +32,34 @@ function Register() {
     }
 
     return (
-        <>
-            <h1>Register</h1>
-            <label>
-                Username: 
-                <input ref={username} type="text" />
-            </label>
+        <div className='flex'>
+            <div className='mid'>
+                <div className='outerSection'>
+                    <h1>Register</h1>
+                    <div className='inputs'>
+                        <label>
+                            <p>Username:</p>
+                            <input ref={username} type="text" />
+                        </label>
+                        
+                        <label>
+                            <p>Password:</p>
+                            <input ref={password} type="password" />
+                        </label>
 
-            <br/><br/>
-            
-            <label>
-                Password:
-                <input ref={password} type="password" />
-            </label>
-            <br/>
-            <label>
-                ReType Password:
-                <input ref={rePassword} type="password" />
-            </label>
+                        <label>
+                            <p>ReType Password:</p>
+                            <input ref={rePassword} type="password" />
+                        </label>
+                    </div>
 
-            <button onClick={handleRegister}>Register</button>
-            {error && <p>{error}</p>}
+                    <button className='register' onClick={handleRegister}>Sign Up <i class="fa-solid fa-right-to-bracket"></i></button>
+                </div>
 
-        </>
+                {error && <div className='error'><i class="fa-solid fa-triangle-exclamation"></i><p>{error}</p></div>}   
+            </div>
+
+        </div>
     )
 }
 
