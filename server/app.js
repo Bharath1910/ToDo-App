@@ -39,7 +39,7 @@ app.post('/api/login', isExists, async (req, res) => {
 
     if (req.isExists) {
         const user = await User.findOne({username})
-
+        console.log(user);
         bcrypt.compare(password, user.password)
             .then((result) => {
                 if (result) {
@@ -47,11 +47,11 @@ app.post('/api/login', isExists, async (req, res) => {
                     res.cookie("token", token);
                     res.status(200).json({token: token})
                 } else {
-                    res.status(200).json("wrong pass :(")
+                    res.status(200).json({wrongPass: true})
                 }
             })
     } else {
-        res.status(200).send("User Doesnt exists")
+        res.status(401).send("User Doesnt exists")
     }
 })
 
