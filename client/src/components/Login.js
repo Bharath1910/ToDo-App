@@ -12,7 +12,7 @@ function Login({postData, error}) {
     
     return (
         <div className='flex'>
-            <div className='mid'>
+            <div className='midLogin'>
                 <div className='outerSection'>
                     <h1>Login</h1>
                     

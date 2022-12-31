@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import './App.css';
+import './Register.css';
+import './Main.css';
 import Add from './Add';
 import List from './List';
 import Sync from './Sync';
@@ -46,12 +47,17 @@ function Main({data, setData}) {
 
     if (token) {
         return (
-            <>
-                <h1>Welcome {user}</h1>
-                <Add data={data} setData={setData}/>
-                <List data={data} handleToggle={handleToggle}/>
-                <Sync data={data}/>
-            </>
+            <div className='flex cover'>
+                <div className='midMain midAdd'>
+                    <h1>Welcome {user}</h1>
+                    <Add data={data} setData={setData}/>
+                </div>
+
+                <div className='midMain'>
+                    <List data={data} handleToggle={handleToggle}/>
+                    <Sync data={data}/>
+                </div>
+            </div>
         );
     } else {
         return (
