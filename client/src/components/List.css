@@ -1,0 +1,54 @@
+.col {
+    display: flex;
+}
+
+.table {
+    display: flex;
+    flex-direction: column;
+    flex: 45;
+}
+
+.table h1 {
+    font-size: 50px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.line {
+    color: #4CAF50;
+    border-left: 3px solid green;
+    height: 400px;
+    top: 0;
+    flex: 1;
+}
+
+
+.checkbox {
+    font-size: 27px;
+    font-family: 'Poppins', sans-serif;
+    text-transform: capitalize;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox input[type='checkbox'] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 27px;
+    height: 27px;
+    background-color: #b0afae;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.checkbox input[type='checkbox']:checked {
+    background-color: #4CAF50;
+}
+
+.sync p {
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    text-transform: capitalize;
+    margin-top: 15px;
+    color: #547fff;
+    font-weight: 600;
+}

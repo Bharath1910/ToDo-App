@@ -53,9 +53,11 @@ function Main({data, setData}) {
                     <Add data={data} setData={setData}/>
                 </div>
 
-                <div className='midMain'>
-                    <List data={data} handleToggle={handleToggle}/>
-                    <Sync data={data}/>
+                <div className="midMain">
+                    <div className='mainInside'>
+                        <List data={data} handleToggle={handleToggle}/>
+                        <Sync data={data}/>
+                    </div>
                 </div>
             </div>
         );

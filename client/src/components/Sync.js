@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import cookies from 'js-cookie'
+import cookies from 'js-cookie';
+import './Register.css'
 
 function Sync(data) {
     const [info, setInfo] = useState(null)
@@ -28,10 +29,11 @@ function Sync(data) {
     }
 
     return (
-        <>
-            <button onClick={uploadData}>Sync To Cloud</button>
-            {info && <p>{info}</p>}
-        </>
+        <div className='sync'>
+            <button className='addButton' onClick={uploadData}>Sync To Cloud</button>
+            {!info && <p><i class="fa-solid fa-circle-info"></i></p>}
+            {info && <p><i class="fa-solid fa-circle-info"></i> {info}</p>}
+        </div>
     )
 }
 
