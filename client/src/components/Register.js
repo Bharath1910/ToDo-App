@@ -1,6 +1,14 @@
 import React, {useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
+import { Client, Account, ID } from "appwrite";
 import './Register.css';
+
+const client = new Client();
+
+client
+    .setEndpoint('http://localhost:8080/v1')
+    .setProject('63df2341d4053833e831');
+
 
 function Register() {
     const [error, setError] = useState(null)
@@ -9,23 +17,25 @@ function Register() {
     const password = useRef()
     const rePassword = useRef()
 
-    async function handleRegister() {
+    function handleRegister() {
         if (password.current.value === rePassword.current.value) {
-            const raw = await fetch('http://localhost:5500/api/register', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({username: username.current.value, password: password.current.value})
-            })
+            const account = new Account(client);
+            const promise = account.create(
+                ID.unique(),
+                username.current.value,
+                password.current.value
+            );
 
-            if (!raw.ok) {
-                const content = await raw.json();
-                setError(content)
-            } else {
-                navigate('/login')
-            }
+            promise
+                .then(response => {
+                    console.log(response);
+                    navigate('/login')  
+                })
+                .catch(error => {
+                    console.log("error");
+                    setError(error.message)
+                })
+
         } else {
             setError("Password doesn't match")
         }
@@ -53,10 +63,10 @@ function Register() {
                         </label>
                     </div>
 
-                    <button className='register' onClick={handleRegister}>Sign Up <i class="fa-solid fa-right-to-bracket"></i></button>
+                    <button className='register' onClick={handleRegister}>Sign Up <i className="fa-solid fa-right-to-bracket"></i></button>
                 </div>
 
-                {error && <div className='error'><i class="fa-solid fa-triangle-exclamation"></i><p>{error}</p></div>}   
+                {error && <div className='error'><i className="fa-solid fa-triangle-exclamation"></i><p>{error}</p></div>}   
             </div>
 
         </div>
