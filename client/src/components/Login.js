@@ -1,12 +1,37 @@
 import React, {useRef} from 'react';
+import { Client, Account } from "appwrite";
 import './Register.css'
 import './Login.css'
+
+
+const client = new Client()
+
+client
+.setEndpoint('http://localhost:8080/v1')
+.setProject('63df2341d4053833e831');
+
+
+function testing() {
+
+}
 
 function Login({postData, error}) {
     const username = useRef()
     const password = useRef()
 
     function handlePost() {
+        const account = new Account(client);
+        const promise = account.createEmailSession(
+            username.current.value,
+            password.current.value            
+        );
+        
+        promise.then(function (response) {
+            console.log(response.userId);
+        }, function (error) {
+            console.log(error);
+        });
+        
         postData(username.current.value, password.current.value)
     }
     
