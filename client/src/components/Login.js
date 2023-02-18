@@ -10,11 +10,6 @@ client
 .setEndpoint('http://localhost:8080/v1')
 .setProject('63df2341d4053833e831');
 
-
-function testing() {
-
-}
-
 function Login({postData, error}) {
     const username = useRef()
     const password = useRef()
@@ -27,12 +22,13 @@ function Login({postData, error}) {
         );
         
         promise.then(function (response) {
+            postData(response.userId)
             console.log(response.userId);
         }, function (error) {
             console.log(error);
         });
+
         
-        postData(username.current.value, password.current.value)
     }
     
     return (

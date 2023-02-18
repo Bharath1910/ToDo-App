@@ -11,7 +11,7 @@ function App() {
     const [error, setError] = useState(null)
     const [data, setData] = useState([])
 
-    async function postData(username, password) {
+    async function postData(userID) {
         const raw =  await fetch("http://localhost:5500/api/login", {
             method: 'POST',
             headers: {
@@ -19,8 +19,7 @@ function App() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: username,
-                password: password
+                userID
             })
         })
 
