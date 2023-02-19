@@ -6,7 +6,8 @@ const cookieParser = require('cookie-parser');
 
 
 require('./config/db.connect').connect()
-const User = require('./schema/user')
+const User = require('./schema/user');
+const user = require('./schema/user');
 
 app = express()
 app.use(express.json())
@@ -17,12 +18,12 @@ app.get('/', (req, res) => {
     res.send("hello :)")
 })
 
-app.post('/api/register', isExists, encrypt, (req, res) => {
+app.post('/api/register', (req, res) => {
     const {username} = req.body
 
     if (!(req.isExists)) {
         try {
-            User.create({username, password: req.hash, todoData: {}})
+            User.create({todoData: []})
             res.status(200).json("Updated DB")
         } 
         catch (error) {
@@ -35,39 +36,45 @@ app.post('/api/register', isExists, encrypt, (req, res) => {
 })
 
 app.post('/api/login', isExists, async (req, res) => {
-    const {username, password} = req.body
+    const {userID} = req.body
 
     if (req.isExists) {
-        const user = await User.findOne({username})
+        const user = await User.findOne({userID})
+        const token = jwt.sign({id: userID}, process.env.JWT_SECRET)
+        res.cookie("token", token);
         console.log(user);
-        bcrypt.compare(password, user.password)
-            .then((result) => {
-                if (result) {
-                    const token = jwt.sign({id: user._id}, process.env.JWT_SECRET)
-                    res.cookie("token", token);
-                    res.status(200).json({token: token})
-                } else {
-                    res.status(200).json({wrongPass: true})
-                }
-            })
+        res.status(200).json({token: token})
     } else {
-        res.status(401).send("User Doesnt exists")
+        console.log("not exists!");
+        try {
+            User.create({userID, todoData: []})
+            console.log("made record!");
+
+            const token = jwt.sign({id: userID}, process.env.JWT_SECRET)
+            res.cookie("token", token);
+            res.status(200).json({token: token})
+            
+        } catch (error) {
+            console.log(error);
+        }
     }
 })
 
 app.post('/api/getData', verifyToken, async (req, res) => {
-    req.userData.password = undefined
+    console.log(req.userData);
     res.status(200).json(req.userData)
 });
 
 app.post('/api/uploadData', verifyToken, async (req, res) => {
-    id = req.userData.id
-    await User.updateOne({_id: id}, {todoData: req.body.data})
+    const userID = req.userData.userID
+    console.log(typeof userID);
+
+    await User.updateOne({userID: userID}, {todoData: req.body.data})
     res.status(200).json("updated DB :)")
 });
 
 async function isExists(req, res, next) {
-    const user = await User.findOne({username: req.body.username})
+    const user = await User.findOne({userID: req.body.userID})
 
     if (user === null) {
         req.isExists = false
@@ -79,22 +86,9 @@ async function isExists(req, res, next) {
     }
 }
 
-function encrypt(req, res, next) {
-    const {password} = req.body
-
-    bcrypt.hash(password, 10)
-        .then(
-            (hash) => {
-                console.log(hash)
-                req.hash = hash
-                next()
-            }
-        )
-}
-
 async function verifyToken(req, res, next) {
     const decodedCookie = jwt.verify(req.body.token, process.env.JWT_SECRET)
-    const user = await User.findById(decodedCookie.id)
+    const user = await User.findOne({userID: decodedCookie.id})
     req.userData = user
     next()
 }
