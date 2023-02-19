@@ -6,7 +6,8 @@ const cookieParser = require('cookie-parser');
 
 
 require('./config/db.connect').connect()
-const User = require('./schema/user')
+const User = require('./schema/user');
+const user = require('./schema/user');
 
 app = express()
 app.use(express.json())
@@ -59,13 +60,16 @@ app.post('/api/login', isExists, async (req, res) => {
     }
 })
 
-app.post('/api/getData', async (req, res) => {
+app.post('/api/getData', verifyToken, async (req, res) => {
+    console.log(req.userData);
     res.status(200).json(req.userData)
 });
 
-app.post('/api/uploadData', async (req, res) => {
-    id = req.userData.id
-    await User.updateOne({_id: id}, {todoData: req.body.data})
+app.post('/api/uploadData', verifyToken, async (req, res) => {
+    const userID = req.userData.userID
+    console.log(typeof userID);
+
+    await User.updateOne({userID: userID}, {todoData: req.body.data})
     res.status(200).json("updated DB :)")
 });
 
@@ -84,7 +88,7 @@ async function isExists(req, res, next) {
 
 async function verifyToken(req, res, next) {
     const decodedCookie = jwt.verify(req.body.token, process.env.JWT_SECRET)
-    const user = await User.findById(decodedCookie.id)
+    const user = await User.findOne({userID: decodedCookie.id})
     req.userData = user
     next()
 }
