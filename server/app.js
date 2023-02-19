@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     res.send("hello :)")
 })
 
-app.post('/api/register', isExists, encrypt, (req, res) => {
+app.post('/api/register', (req, res) => {
     const {username} = req.body
 
     if (!(req.isExists)) {
@@ -39,29 +39,27 @@ app.post('/api/login', isExists, async (req, res) => {
 
     if (req.isExists) {
         const user = await User.findOne({userID})
+        const token = jwt.sign({id: userID}, process.env.JWT_SECRET)
+        res.cookie("token", token);
         console.log(user);
-        if (user != null) {
+        res.status(200).json({token: token})
+    } else {
+        console.log("not exists!");
+        try {
+            User.create({userID, todoData: []})
+            console.log("made record!");
+
             const token = jwt.sign({id: userID}, process.env.JWT_SECRET)
             res.cookie("token", token);
             res.status(200).json({token: token})
-        } else {
-            console.log("not exists!");
-            try {
-                User.create({userID, todoData: []})
-                console.log("made record!");
-                console.log(User.id);
-            } catch (error) {
-                console.log(error);
-            }
+            
+        } catch (error) {
+            console.log(error);
         }
-    
-    } else {
-        res.status(401).send("User Doesnt exists")
     }
 })
 
 app.post('/api/getData', async (req, res) => {
-    req.userData.password = undefined
     res.status(200).json(req.userData)
 });
 
@@ -72,7 +70,7 @@ app.post('/api/uploadData', async (req, res) => {
 });
 
 async function isExists(req, res, next) {
-    const user = await User.findOne({username: req.body.username})
+    const user = await User.findOne({userID: req.body.userID})
 
     if (user === null) {
         req.isExists = false
@@ -82,19 +80,6 @@ async function isExists(req, res, next) {
         req.isExists = true
         next()
     }
-}
-
-function encrypt(req, res, next) {
-    const {password} = req.body
-
-    bcrypt.hash(password, 10)
-        .then(
-            (hash) => {
-                console.log(hash)
-                req.hash = hash
-                next()
-            }
-        )
 }
 
 async function verifyToken(req, res, next) {
