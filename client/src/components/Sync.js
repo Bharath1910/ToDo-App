@@ -28,11 +28,22 @@ function Sync(data) {
         delay(1500).then(() => setInfo(null));
     }
 
+    function filter() {
+        console.log("in filter");
+    }
+
     return (
-        <div className='sync'>
-            <button className='addButton' onClick={uploadData}>Sync To Cloud</button>
-            {!info && <p><i class="fa-solid fa-circle-info"></i></p>}
-            {info && <p><i class="fa-solid fa-circle-info"></i> {info}</p>}
+        <div className=''>
+            <div className='sync'>
+                <button className='addButton' onClick={uploadData}>Sync To Cloud</button>
+                <button className="addButton" onClick={filter}>Filter</button>
+            </div>
+
+            <div className="sync">
+                {!info && <p><i class="fa-solid fa-circle-info"></i></p>}
+                {info && <p><i class="fa-solid fa-circle-info"></i> {info}</p>}
+            </div>
+        
         </div>
     )
 }
